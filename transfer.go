@@ -1,9 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 type TransferExecutor struct {
 	db *AcessoDados
+	mutex sync.Mutex
 }
 
 func NewTransferExecutor() *TransferExecutor {
@@ -21,12 +25,10 @@ func (t *TransferExecutor) Transferir(
 	valor float64,
 ) {
 
-	origem := t.db.GetSaldo(contaOrigem)
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
 
-	if origem == nil {
-		fmt.Println("Conta origem inexistente")
-		return
-	}
+	origem := t.db.GetSaldo(contaOrigem)
 
 	if origem.Saldo < valor {
 
@@ -39,11 +41,6 @@ func (t *TransferExecutor) Transferir(
 	}
 
 	destino := t.db.GetSaldo(contaDestino)
-
-	if destino == nil {
-		fmt.Println("Conta destino inexistente")
-		return
-	}
 
 	origem.Saldo -= valor
 	destino.Saldo += valor
