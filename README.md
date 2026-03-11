@@ -2,8 +2,7 @@
 
 ## Descrição
 
-Este projeto implementa uma simulação de transferências financeiras entre contas bancárias.
-O código original apresentava alguns problemas de compilação, inconsistências de lógica e erros nas transações bancárias onde algumas estavam sendo canceladas mesmo com saldo positivo e outras sem saldo sendo efetivadas.
+Este projeto implementa uma simulação de transferências financeiras entre contas bancárias. O projeto foi apresentado como um case técnico, cujo objetivo era analisar o código existente, compreender sua estrutura e funcionamento, e corrigir os problemas identificados. O código original apresentava alguns problemas de compilação, inconsistências de lógica e erros nas transações bancárias, onde algumas estavam sendo canceladas mesmo com saldo positivo e outras, mesmo sem saldo suficiente, estavam sendo efetivadas.
 
 O objetivo deste projeto foi **refatorar a implementação original**, corrigir os problemas encontrados e aplicar boas práticas de engenharia de software.
 

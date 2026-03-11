@@ -10,7 +10,7 @@ import (
 
 func main() {
 
-	// cria repository
+	// cria repository de contas
 	repo := repository.NewAccountRepository()
 
 	// cria service
@@ -28,15 +28,15 @@ func main() {
 		{CorrelationID: 8, Datetime: "09/09/2023 14:19:01", ContaOrigem: 573659065, ContaDestino: 675869708, Valor: 150},
 	}
 
-	var wg sync.WaitGroup
+	var wg sync.WaitGroup //serve para controlar múltiplas goroutines. Permite que o programa espere todas as goroutines terminarem antes de finalizar.
 
 	for _, t := range transacoes {
 
-		wg.Add(1)
+		wg.Add(1) //uma nova goroutine será executada
 
-		go func(tr model.Transaction) {
-			defer wg.Done()
-
+		go func(tr model.Transaction) { //cria uma goroutine
+			defer wg.Done() //finaliza e quando terminar ele avisa o waitGroup : essa tarefa terminou
+			//chamando o serviço que executa a transferencia
 			executor.Transferir(
 				tr.CorrelationID,
 				tr.ContaOrigem,
@@ -48,6 +48,6 @@ func main() {
 
 	}
 
-	wg.Wait()
+	wg.Wait() //Aqui o programa fica bloqueado até todas as goroutines terminarem.
 
 }
