@@ -71,7 +71,7 @@ Isso poderia gerar situações como:
 Este problema pode ser identificado executando o programa com o detector de race do Go:
 
 ```
-go run -race ./cmd
+go run -race .
 ```
 
 ✔ **Solução:**
