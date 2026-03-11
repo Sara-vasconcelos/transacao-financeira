@@ -1,3 +1,3 @@
-module github.com/seuusuario/transacao-financeira
+module transacao-financeira
 
 go 1.24.4

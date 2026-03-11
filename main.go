@@ -1,32 +1,32 @@
 package main
 
 import (
-	"fmt"
 	"sync"
-)
 
-type Transaction struct {
-	CorrelationID int
-	Datetime      string
-	ContaOrigem   int64
-	ContaDestino  int64
-	Valor         float64
-}
+	"transacao-financeira/internal/model"
+	"transacao-financeira/internal/repository"
+	"transacao-financeira/internal/service"
+)
 
 func main() {
 
-	transacoes := []Transaction{
-		{1, "09/09/2023 14:15:00", 938485762, 2147483649, 150},
-		{2, "09/09/2023 14:15:05", 2147483649, 210385733, 149},
-		{3, "09/09/2023 14:15:29", 347586970, 238596054, 1100},
-		{4, "09/09/2023 14:17:00", 675869708, 210385733, 5300},
-		{5, "09/09/2023 14:18:00", 238596054, 674038564, 1489},
-		{6, "09/09/2023 14:18:20", 573659065, 563856300, 49},
-		{7, "09/09/2023 14:19:00", 938485762, 2147483649, 44},
-		{8, "09/09/2023 14:19:01", 573659065, 675869708, 150},
-	}
+	// cria repository
+	repo := repository.NewAccountRepository()
 
-	executor := NewTransferExecutor()
+	// cria service
+	executor := service.NewTransferService(repo)
+
+	// lista de transações
+	transacoes := []model.Transaction{
+		{CorrelationID: 1, Datetime: "09/09/2023 14:15:00", ContaOrigem: 938485762, ContaDestino: 2147483649, Valor: 150},
+		{CorrelationID: 2, Datetime: "09/09/2023 14:15:05", ContaOrigem: 2147483649, ContaDestino: 210385733, Valor: 149},
+		{CorrelationID: 3, Datetime: "09/09/2023 14:15:29", ContaOrigem: 347586970, ContaDestino: 238596054, Valor: 1100},
+		{CorrelationID: 4, Datetime: "09/09/2023 14:17:00", ContaOrigem: 675869708, ContaDestino: 210385733, Valor: 5300},
+		{CorrelationID: 5, Datetime: "09/09/2023 14:18:00", ContaOrigem: 238596054, ContaDestino: 674038564, Valor: 1489},
+		{CorrelationID: 6, Datetime: "09/09/2023 14:18:20", ContaOrigem: 573659065, ContaDestino: 563856300, Valor: 49},
+		{CorrelationID: 7, Datetime: "09/09/2023 14:19:00", ContaOrigem: 938485762, ContaDestino: 2147483649, Valor: 44},
+		{CorrelationID: 8, Datetime: "09/09/2023 14:19:01", ContaOrigem: 573659065, ContaDestino: 675869708, Valor: 150},
+	}
 
 	var wg sync.WaitGroup
 
@@ -34,7 +34,7 @@ func main() {
 
 		wg.Add(1)
 
-		go func(tr Transaction) {
+		go func(tr model.Transaction) {
 			defer wg.Done()
 
 			executor.Transferir(
@@ -50,5 +50,4 @@ func main() {
 
 	wg.Wait()
 
-	fmt.Println("Processamento finalizado")
 }
