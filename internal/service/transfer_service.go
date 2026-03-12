@@ -6,14 +6,17 @@ import (
 
 	"transacao-financeira/internal/repository"
 )
+//regras de negocios
 
 // representa o serviço que executa transferências.
+//service não acessa os dados diretamente , ela usa essa dependencia para acessar o repository
 type TransferService struct {
 	repo  *repository.AccountRepository //dependência da service, ele usa o repository para buscar contas e atualizar contas
-	mutex sync.Mutex                    // É como uma trava que evita que varias goroutines alterarem o saldo ao mesmo tempo. Apenas uma transferência por vez possa modificar os saldos
+	mutex sync.Mutex                    // É como uma trava que evita que varias goroutines alterarem o saldo ao mesmo tempo. 
+	// Apenas uma transferência por vez possa modificar os saldos
 }
 
-// Nova instancia da service
+// Nova instancia da service - injeção de dependencia - construtor
 func NewTransferService(repo *repository.AccountRepository) *TransferService {
 
 	return &TransferService{

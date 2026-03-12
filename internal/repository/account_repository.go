@@ -2,11 +2,15 @@ package repository
 
 import "transacao-financeira/internal/model"
 
-// representa um repositorio de contas
-type AccountRepository struct {
-	accounts map[int64]*model.Account // ex: 938485762 → {ID: 938485762, Balance: 180}
-}
+//simula um banco de dados
 
+// representa um repositorio de contas
+
+/* Com o ponteiro eu posso modificar o objeto diretamente na memória sem precisar fazer uma copia dele.*/
+type AccountRepository struct {
+	accounts map[int64]*model.Account // chave -valor ex: 938485762 → {ID: 938485762, Saldo: 180}
+}
+//instância de AccountRepository.
 func NewAccountRepository() *AccountRepository {
 
 	accounts := map[int64]*model.Account{ //map de contas já inicializado.
@@ -21,15 +25,16 @@ func NewAccountRepository() *AccountRepository {
 		563856300:  {ID: 563856300, Saldo: 1200},
 	}
 
-	return &AccountRepository{
+	return &AccountRepository{ //retorno do ponteiro do repository , permite que outras partes acessam
 		accounts: accounts,
 	}
 }
 
+//(r *AccountRepository) significa que o método pertence ao repository.
 // busca uma conta pelo ID.
 func (r *AccountRepository) GetAccount(id int64) *model.Account {
 
-	account, exists := r.accounts[id] //verifica se existe
+	account, exists := r.accounts[id] //verifica se existe dentro do map , retorna o valor e true se existir
 
 	if !exists {
 		return nil
@@ -41,6 +46,6 @@ func (r *AccountRepository) GetAccount(id int64) *model.Account {
 // atualiza uma conta no repository
 func (r *AccountRepository) UpdateAccount(account *model.Account) {
 
-	r.accounts[account.ID] = account
+	r.accounts[account.ID] = account //atualiza dentro do map
 
 }

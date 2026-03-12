@@ -11,7 +11,7 @@ import (
 func main() {
 
 	// cria repository de contas
-	repo := repository.NewAccountRepository()
+	repo := repository.NewAccountRepository() // cria o map de contas já com dados iniciais.
 
 	// cria service
 	executor := service.NewTransferService(repo)
@@ -27,14 +27,14 @@ func main() {
 		{CorrelationID: 7, Datetime: "09/09/2023 14:19:00", ContaOrigem: 938485762, ContaDestino: 2147483649, Valor: 44},
 		{CorrelationID: 8, Datetime: "09/09/2023 14:19:01", ContaOrigem: 573659065, ContaDestino: 675869708, Valor: 150},
 	}
-
+// Sem ele, o programa poderia terminar antes das goroutines concluírem.
 	var wg sync.WaitGroup //serve para controlar múltiplas goroutines. Permite que o programa espere todas as goroutines terminarem antes de finalizar.
 
-	for _, t := range transacoes {
+	for _, t := range transacoes { //faço o loop
 
-		wg.Add(1) //uma nova goroutine será executada
+		wg.Add(1) //uma nova goroutine será executada para cada transação
 
-		go func(tr model.Transaction) { //cria uma goroutine
+		go func(tr model.Transaction) { //cria uma goroutine para que as transações rodem em paralelo
 			defer wg.Done() //finaliza e quando terminar ele avisa o waitGroup : essa tarefa terminou
 			//chamando o serviço que executa a transferencia
 			executor.Transferir(
@@ -44,7 +44,7 @@ func main() {
 				tr.Valor,
 			)
 
-		}(t)
+		}(t) //passa a transação atual para a goroutine.
 
 	}
 
